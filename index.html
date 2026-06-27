@@ -1,0 +1,1022 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CellCast</title>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --card: rgba(255, 255, 255, 0.82);
+      --text: #182033;
+      --muted: #4b5565;
+      --primary: #4f7cff;
+      --primary-dark: #3157d8;
+      --cyan: #3dd6c6;
+      --pink: #ff7aa8;
+      --orange: #ffb86b;
+      --line: rgba(79, 124, 255, 0.18);
+      --shadow: 0 20px 60px rgba(51, 84, 160, 0.15);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: #ffffff;
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid rgba(79, 124, 255, 0.12);
+    }
+
+    .nav-inner {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 22px;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      box-shadow: 0 10px 26px rgba(79, 124, 255, 0.35);
+      position: relative;
+    }
+
+    .logo-mark::after {
+      content: "";
+      position: absolute;
+      width: 11px;
+      height: 11px;
+      background: white;
+      border-radius: 50%;
+      top: 7px;
+      left: 7px;
+      box-shadow: 12px 10px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-dark);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 68px 0 52px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: rgba(79, 124, 255, 0.1);
+      color: var(--primary-dark);
+      border: 1px solid rgba(79, 124, 255, 0.18);
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .badge span {
+      width: 8px;
+      height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 0 6px rgba(61, 214, 198, 0.16);
+    }
+
+    h1 {
+      font-size: clamp(42px, 6vw, 76px);
+      line-height: 0.98;
+      letter-spacing: -0.07em;
+      margin-bottom: 24px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary), #7a5cff 48%, var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 19px;
+      color: var(--muted);
+      max-width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+    .btn {
+      padding: 13px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 15px;
+      transition: 0.25s ease;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 16px 32px rgba(79, 124, 255, 0.32);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(79, 124, 255, 0.38);
+    }
+
+    .btn-soft {
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--primary-dark);
+      border-color: rgba(79, 124, 255, 0.18);
+    }
+
+    .btn-soft:hover {
+      background: white;
+      transform: translateY(-2px);
+    }
+
+    .btn-paper {
+      background: rgba(61, 214, 198, 0.12);
+      color: #087b73;
+      border-color: rgba(61, 214, 198, 0.35);
+    }
+
+    .btn-paper:hover {
+      background: rgba(61, 214, 198, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .meta-pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(79, 124, 255, 0.12);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Sections */
+    section {
+      padding: 52px 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 34px;
+    }
+
+    .section-head-wide {
+      max-width: 100%;
+    }
+
+    .section-kicker {
+      color: var(--primary-dark);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.1;
+      letter-spacing: -0.05em;
+      margin-bottom: 14px;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .overview-layout {
+      display: grid;
+      gap: 28px;
+    }
+
+    .overview-header {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .overview-header.section-head {
+      margin-bottom: 0;
+    }
+
+    .overview-header h2,
+    .overview-header .section-desc {
+      margin-bottom: 0;
+    }
+
+    .overview-content {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(360px, 1.15fr);
+      gap: 30px;
+      align-items: stretch;
+    }
+
+    .overview-cards {
+      display: grid;
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      height: 100%;
+    }
+
+    .overview-cards .card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 12px;
+      align-items: center;
+      align-content: center;
+      padding: 16px 18px;
+    }
+
+    .overview-cards .icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      font-size: 18px;
+      margin-bottom: 0;
+    }
+
+    .overview-cards h3 {
+      margin-bottom: 0;
+      font-size: 19px;
+    }
+
+    .overview-cards p {
+      grid-column: 1 / -1;
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .figure-panel {
+      align-self: start;
+      background: white;
+      border: 1px solid rgba(79, 124, 255, 0.13);
+      border-radius: 22px;
+      box-shadow: 0 12px 32px rgba(79, 124, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .figure-panel img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(79, 124, 255, 0.13);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 14px 40px rgba(79, 124, 255, 0.08);
+      transition: 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 60px rgba(79, 124, 255, 0.14);
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, rgba(79, 124, 255, 0.14), rgba(61, 214, 198, 0.18));
+      color: var(--primary-dark);
+      font-size: 22px;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      letter-spacing: -0.03em;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* Method */
+    .method-panel {
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(79, 124, 255, 0.14);
+      border-radius: 30px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .step {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px 14px;
+      text-align: center;
+      min-height: 132px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      font-size: 24px;
+      font-weight: 900;
+      z-index: 3;
+    }
+
+    .step-num {
+      width: 30px;
+      height: 30px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(79, 124, 255, 0.1);
+      color: var(--primary-dark);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .step strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .method-model {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
+      gap: 30px;
+      align-items: stretch;
+      margin-bottom: 26px;
+    }
+
+    .model-copy,
+    .model-figure {
+      background: white;
+      border: 1px solid rgba(79, 124, 255, 0.13);
+      border-radius: 22px;
+      box-shadow: 0 12px 32px rgba(79, 124, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .model-copy {
+      display: grid;
+      align-content: center;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .model-copy h3 {
+      font-size: 24px;
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .model-copy p,
+    .model-copy li {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .model-copy ul {
+      display: grid;
+      gap: 10px;
+      padding-left: 18px;
+    }
+
+    .model-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Results */
+    .results {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .metric-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.66));
+      border: 1px solid rgba(79, 124, 255, 0.14);
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: 0 16px 48px rgba(79, 124, 255, 0.1);
+    }
+
+    .metric-value {
+      font-size: 48px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -0.06em;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-weight: 900;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .bar-item {
+      display: grid;
+      gap: 6px;
+    }
+
+    .bar-top {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .bar-track {
+      height: 10px;
+      background: rgba(79, 124, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: var(--w);
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), var(--cyan));
+    }
+
+    .lab-results {
+      display: grid;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .lab-figure {
+      background: white;
+      border: 1px solid rgba(79, 124, 255, 0.13);
+      border-radius: 22px;
+      box-shadow: 0 12px 32px rgba(79, 124, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .lab-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .lab-row-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .lab-row-split .lab-figure {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 420px;
+    }
+
+    .lab-row-split .lab-figure img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    }
+
+    .lab-row-wide .lab-figure {
+      height: 240px;
+    }
+
+    .lab-summary {
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(79, 124, 255, 0.13);
+      border-radius: 22px;
+      padding: 22px 24px;
+      color: var(--muted);
+      font-size: 16px;
+      box-shadow: 0 12px 32px rgba(79, 124, 255, 0.08);
+    }
+
+    /* Team */
+    .team-box {
+      display: block;
+    }
+
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .member {
+      background: white;
+      border: 1px solid rgba(79, 124, 255, 0.13);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 12px 32px rgba(79, 124, 255, 0.08);
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink), var(--orange));
+      margin-bottom: 10px;
+    }
+
+    .member strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .member span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer {
+      padding: 42px 0;
+      color: var(--muted);
+      text-align: center;
+      border-top: 1px solid rgba(79, 124, 255, 0.12);
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .results {
+        grid-template-columns: 1fr;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .overview-layout {
+        gap: 22px;
+      }
+
+      .overview-header,
+      .overview-content,
+      .method-model,
+      .lab-row-split {
+        grid-template-columns: 1fr;
+      }
+
+      .member-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .lab-row-split .lab-figure {
+        height: auto;
+      }
+
+      .lab-row-split .lab-figure img {
+        height: auto;
+      }
+
+      .pipeline {
+        grid-template-columns: 1fr;
+      }
+
+      .step:not(:last-child)::after {
+        content: "↓";
+        right: 50%;
+        top: auto;
+        bottom: -24px;
+        transform: translateX(50%);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 44px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .member-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="logo">
+        CellCast
+      </a>
+
+      <nav class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#team">Team</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <h1>
+            Forecasting a Cell’s Future
+            <span class="gradient-text">Before the Experiment</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            CellCast is an AI-assisted model that predicts how cells respond to perturbations directly from control-state single-cell gene expression profiles, reducing the need for costly and time-consuming laboratory perturbation experiments.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#method">Explore Method</a>
+            <a class="btn btn-soft" href="#results">View Results</a>
+            <a class="btn btn-paper" href="paper/paper.pdf" target="_blank" rel="noopener">View Paper</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="overview">
+      <div class="container">
+        <div class="overview-layout">
+          <div class="section-head section-head-wide overview-header reveal">
+            <h2>Why predict perturbation responses?</h2>
+          </div>
+
+          <div class="overview-content">
+            <div class="overview-cards">
+              <div class="card reveal">
+                <div class="icon">🧬</div>
+                <h3>Single-cell Resolution</h3>
+                <p>
+                  Models gene expression at single-cell resolution to capture heterogeneity and
+                  perturbation-induced changes.
+                </p>
+              </div>
+
+              <div class="card reveal">
+                <div class="icon">⚡</div>
+                <h3>Before the Experiment</h3>
+                <p>
+                  Predicts likely cellular responses computationally before costly wet-lab
+                  perturbation profiling.
+                </p>
+              </div>
+            </div>
+
+            <div class="figure-panel reveal">
+              <img src="figure/figure1.png" alt="Figure 1: CellCast overview workflow">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="container">
+        <div class="section-head section-head-wide reveal">
+          <h2>A full-gene axial-attention predictor</h2>
+        </div>
+
+        <div class="method-model reveal">
+          <div class="model-copy">
+            <h3>Model architecture</h3>
+            <p>
+              CellCast reshapes the full gene expression vector into a fixed two-dimensional gene
+              grid, then predicts perturbation-induced residual expression changes.
+            </p>
+            <ul>
+              <li>Gene-aware tokens combine expression values, gene identity, and 2D position.</li>
+              <li>Row-wise and column-wise attention model dependencies across thousands of genes efficiently.</li>
+              <li>The predicted residual response is added back to the control profile to produce the perturbed expression state.</li>
+            </ul>
+          </div>
+
+          <div class="model-figure">
+            <img src="figure/model.jpg" alt="CellCast axial-attention model architecture">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="container">
+        <div class="section-head section-head-wide reveal">
+          <h2>Strong perturbation prediction performance</h2>
+          <p class="section-desc">
+            CellCast was evaluated under both i.i.d. and cross-species settings, showing strong
+            mean-expression prediction and improved recovery of perturbation-responsive genes.
+          </p>
+        </div>
+
+        <div class="results">
+          <div class="metric-card reveal">
+            <div class="metric-value">0.9716</div>
+            <div class="metric-label">Mean R² under i.i.d. setting</div>
+            <p style="color: var(--muted);">
+              Averaged across six cell types and repeated splits on the COVID-19 perturbation dataset.
+            </p>
+
+            <div class="bar-list">
+              <div class="bar-item">
+                <div class="bar-top">
+                  <span>CellCast</span>
+                  <span>Best</span>
+                </div>
+                <div class="bar-track"><div class="bar-fill" style="--w: 97%;"></div></div>
+              </div>
+
+              <div class="bar-item">
+                <div class="bar-top">
+                  <span>Baseline gap reduced</span>
+                  <span>77.5%</span>
+                </div>
+                <div class="bar-track"><div class="bar-fill" style="--w: 78%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-card reveal">
+            <div class="metric-value">0.9982</div>
+            <div class="metric-label">Average R² in cross-species prediction</div>
+            <p style="color: var(--muted);">
+              CellCast generalized across mouse, rat, rabbit, and pig in the LPS6 perturbation setting.
+            </p>
+
+            <div class="bar-list">
+              <div class="bar-item">
+                <div class="bar-top">
+                  <span>Top-100 DEG recovery</span>
+                  <span>93.75</span>
+                </div>
+                <div class="bar-track"><div class="bar-fill" style="--w: 94%;"></div></div>
+              </div>
+
+              <div class="bar-item">
+                <div class="bar-top">
+                  <span>Mean Jaccard similarity</span>
+                  <span>0.8831</span>
+                </div>
+                <div class="bar-track"><div class="bar-fill" style="--w: 88%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lab-results">
+          <figure class="lab-figure reveal">
+            <img src="figure/lab1.png" alt="Lab result figure 1">
+          </figure>
+
+          <figure class="lab-figure reveal">
+            <img src="figure/lab2.png" alt="Lab result figure 2">
+          </figure>
+
+          <div class="lab-row-split">
+            <figure class="lab-figure reveal">
+              <img src="figure/lab3.png" alt="Lab result figure 3">
+            </figure>
+
+            <figure class="lab-figure reveal">
+              <img src="figure/lab4.png" alt="Lab result figure 4">
+            </figure>
+          </div>
+
+          <p class="lab-summary reveal">
+            Across the evaluation panels, CellCast shows strong agreement between predicted and
+            measured perturbation responses, while recovering key response genes and maintaining
+            robust performance across both i.i.d. and cross-species settings.
+          </p>
+
+          <div class="lab-row-split lab-row-wide">
+            <figure class="lab-figure reveal">
+              <img src="figure/lab5.png" alt="Lab result figure 5">
+            </figure>
+
+            <figure class="lab-figure reveal">
+              <img src="figure/lab6.png" alt="Lab result figure 6">
+            </figure>
+          </div>
+
+          <figure class="lab-figure reveal">
+            <img src="figure/lab7.png" alt="Lab result figure 7">
+          </figure>
+
+          <p class="lab-summary reveal">
+            Additional analyses further support CellCast's ability to preserve biologically
+            meaningful response structure, highlighting consistent prediction quality across
+            cell types, perturbation conditions, and evaluation metrics.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="team">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>CellMind Team</h2>
+        </div>
+
+        <div class="team-box">
+          <div class="member-grid">
+            <div class="member reveal">
+              <div class="avatar"></div>
+              <strong>Grace Zhou</strong>
+              <span>Grace.zxy15@gmail.com</span>
+            </div>
+
+            <div class="member reveal">
+              <div class="avatar"></div>
+              <strong>Phoebe Sun</strong>
+              <span>Phoebe.sun.yuling@gmail.com</span>
+            </div>
+
+            <div class="member reveal">
+              <div class="avatar"></div>
+              <strong>Jack Zhang</strong>
+              <span>zzk20090416@gmail.com</span>
+            </div>
+
+            <div class="member reveal">
+              <div class="avatar"></div>
+              <strong>Shannon Ye (Mentor)</strong>
+              <span>Shannon.ye@yrdsb.ca</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 CellMind Team · CellCast Project Page
+    </div>
+  </footer>
+
+  <script>
+    // Reveal animation on scroll
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>
